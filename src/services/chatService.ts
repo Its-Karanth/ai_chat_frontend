@@ -12,8 +12,10 @@ export const chatService = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
         body: JSON.stringify({ message }),
+        mode: 'cors',
       });
 
       if (!response.ok) {
@@ -30,7 +32,12 @@ export const chatService = {
 
   async getHistory(): Promise<ChatMessage[]> {
     try {
-      const response = await fetch(`${API_URL}/history`);
+      const response = await fetch(`${API_URL}/history`, {
+        mode: 'cors',
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
       
       if (!response.ok) {
         throw new Error('Failed to fetch chat history');
@@ -48,6 +55,10 @@ export const chatService = {
     try {
       const response = await fetch(`${API_URL}/clear`, {
         method: 'POST',
+        mode: 'cors',
+        headers: {
+          'Accept': 'application/json',
+        },
       });
 
       if (!response.ok) {
