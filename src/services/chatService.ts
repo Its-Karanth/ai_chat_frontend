@@ -19,7 +19,8 @@ export const chatService = {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send message');
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || 'Failed to send message');
       }
 
       const data = await response.json();
@@ -33,6 +34,7 @@ export const chatService = {
   async getHistory(): Promise<ChatMessage[]> {
     try {
       const response = await fetch(`${API_URL}/history`, {
+        method: 'GET',
         mode: 'cors',
         headers: {
           'Accept': 'application/json',
@@ -40,7 +42,8 @@ export const chatService = {
       });
       
       if (!response.ok) {
-        throw new Error('Failed to fetch chat history');
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || 'Failed to fetch chat history');
       }
 
       const data = await response.json();
@@ -58,11 +61,14 @@ export const chatService = {
         mode: 'cors',
         headers: {
           'Accept': 'application/json',
+          'Content-Type': 'application/json',
         },
+        body: JSON.stringify({}),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to clear chat history');
+        const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+        throw new Error(errorData.error || 'Failed to clear chat history');
       }
     } catch (error) {
       console.error('Error clearing chat history:', error);
